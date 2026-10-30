@@ -1,153 +1,137 @@
 (() => {
   'use strict';
-  const $ = (selector) => document.querySelector(selector);
-  const photos = window.GALLERY_DATA?.photos || [];
+  const $ = selector => document.querySelector(selector);
+  const {photos = [], topics = []} = window.GALLERY_DATA || {};
   const grid = $('#photo-grid');
-  if (!photos.length) {
-    $('#result-count').textContent = '相册尚未准备好，请先生成图片数据。';
-    $('#hero-photo').disabled = true;
-    return;
-  }
-  const travel = new Set(['青甘环线', '川西', '九寨沟', '哈尔滨', '张家界', '毕业旅行']);
-  const people = new Set(['毕业时光', '人像记录']);
-  const groupFor = (photo) => travel.has(photo.category) ? 'travel' : people.has(photo.category) ? 'people' : 'daily';
-  let group = 'all';
-  let filtered = photos.slice();
-  let viewing = [];
-  let current = 0;
-  const categories = [...new Set(photos.map(photo => photo.category))];
+  if (!topics.length) { $('#result-count').textContent = '相册数据暂时无法加载，请刷新重试。'; $('#hero-photo').disabled = true; return; }
+  const byId = new Map(photos.map(p => [p.id, p]));
+  const topicById = new Map(topics.map(t => [t.id, t]));
+  let topicId = topics[0].id, location = 'all', filtered = [], visible = 36, viewing = [], current = 0;
+  const element = (tag, className, text) => { const node = document.createElement(tag); if (className) node.className = className; if (text !== undefined) node.textContent = text; return node; };
+  const locationText = p => [p.location, p.caption].filter(Boolean).join(' · ');
   $('#total-count').textContent = photos.length;
-  $('#tab-count').textContent = photos.length;
-  $('#category-count').textContent = categories.length.toString().padStart(2, '0');
-  $('#heading-count').textContent = `(${photos.length})`;
-  const hero = photos.find(photo => photo.name === '川西-12.JPG') || photos[0];
-  $('#hero-image').src = hero.src;
-  $('#hero-image').alt = hero.title;
-  $('.hero-photo-caption small').textContent = `山野来信 · ${hero.category}`;
-  categories.forEach(category => {
-    const option = document.createElement('option');
-    option.value = category;
-    option.textContent = `${category} (${photos.filter(photo => photo.category === category).length})`;
-    $('#album-select').append(option);
+  $('#topic-count').textContent = String(topics.length).padStart(2, '0');
+  const hero = byId.get(topics[0].cover) || photos[0];
+  if (hero) {
+    $('#hero-image').src = hero.src; $('#hero-image').alt = hero.title;
+    $('#hero-image').width = hero.width; $('#hero-image').height = hero.height;
+    $('#hero-name').textContent = hero.title; $('#hero-location').textContent = locationText(hero);
+    $('#hero-photo').setAttribute('aria-label', `放大 ${hero.title}`);
+  } else { $('#hero-photo').hidden = true; }
+
+  topics.forEach((topic, index) => {
+    const card = element('a', 'topic-card' + (!topic.count ? ' coming-soon' : ''));
+    card.href = '#collection'; card.dataset.topic = topic.id;
+    const cover = element('div', 'topic-cover');
+    const photo = byId.get(topic.cover);
+    if (photo) { const img = element('img'); img.src = photo.thumb; img.alt = `${topic.name}：${photo.title}`; img.width = photo.width; img.height = photo.height; img.loading = 'lazy'; cover.append(img); }
+    else { cover.append(element('span', 'blank-frame', '留白'), element('small', 'blank-note', '好的故事，值得等一等。')); }
+    cover.append(element('span', 'chapter-number', String(index + 1).padStart(2, '0')));
+    const heading = element('div', 'topic-heading'); heading.append(element('h3', '', topic.name), element('span', '', topic.count ? `${topic.count} 张 ↗` : '待续 ↗'));
+    card.append(cover, heading, element('p', 'topic-note', topic.note));
+    card.addEventListener('click', () => selectTopic(topic.id));
+    $('#topic-cards').append(card);
+    const tab = element('button', 'topic-tab', topic.name); tab.dataset.topic = topic.id;
+    tab.append(element('small', '', topic.count || '待续'));
+    tab.addEventListener('click', () => selectTopic(topic.id)); $('#topic-tabs').append(tab);
   });
+
+  function selectTopic(id) {
+    topicId = id; location = 'all'; visible = 36;
+    $('#search').value = ''; $('#orientation').value = 'all';
+    const topic = topicById.get(id);
+    $('#collection-title').textContent = topic.name; $('#collection-intro').textContent = topic.intro;
+    document.querySelectorAll('.topic-tab').forEach(tab => { const active = tab.dataset.topic === id; tab.classList.toggle('active', active); tab.setAttribute('aria-pressed', String(active)); });
+    $('#filter-bar').hidden = !topic.count;
+    $('#search').disabled = !topic.count;
+    $('#search').placeholder = topic.count ? '搜索照片、地点或故事…' : '这一章，待续…';
+    const locations = [...new Set(photos.filter(p => p.topic === id).map(p => p.location))];
+    $('#location-filters').replaceChildren();
+    ['all', ...locations].forEach(value => {
+      const button = element('button', 'location-filter', value === 'all' ? '全部' : value);
+      button.dataset.location = value;
+      button.addEventListener('click', () => { location = value; visible = 36; render(); });
+      $('#location-filters').append(button);
+    });
+    render();
+    document.body.dataset.activeTopic = id;
+    window.dispatchEvent(new CustomEvent('gallery:topicchange', {detail: {id}}));
+  }
+
+  function layout() {
+    for (const card of grid.children) {
+      const height = card.firstElementChild.getBoundingClientRect().height + card.lastElementChild.getBoundingClientRect().height + 30;
+      card.style.gridRowEnd = `span ${Math.ceil(height / 8)}`;
+    }
+  }
+  let lastWidth = 0;
+  const observer = new ResizeObserver(entries => { const width = entries[0].contentRect.width; if (width !== lastWidth) { lastWidth = width; requestAnimationFrame(layout); } });
+  observer.observe(grid);
 
   function render() {
     const query = $('#search').value.trim().toLocaleLowerCase();
-    const album = $('#album-select').value;
-    filtered = photos.filter(photo => (group === 'all' || groupFor(photo) === group)
-      && (album === 'all' || photo.category === album)
-      && `${photo.name} ${photo.category}`.toLocaleLowerCase().includes(query));
+    const orientation = $('#orientation').value;
+    filtered = photos.filter(p => p.topic === topicId && (location === 'all' || p.location === location)
+      && (orientation === 'all' || (orientation === 'portrait' ? p.height > p.width : p.width >= p.height))
+      && `${p.title} ${p.location} ${p.caption} ${topicById.get(p.topic).name}`.toLocaleLowerCase().includes(query));
+    document.querySelectorAll('.location-filter').forEach(button => { const active = button.dataset.location === location; button.classList.toggle('active', active); button.setAttribute('aria-pressed', String(active)); });
     const fragment = document.createDocumentFragment();
-    filtered.forEach((photo, index) => {
-      const card = document.createElement('article');
-      card.className = 'photo-card';
-      const button = document.createElement('button');
-      button.className = 'photo-button';
-      button.setAttribute('aria-label', `放大 ${photo.title}`);
-      const image = document.createElement('img');
-      image.src = photo.thumb;
-      image.alt = photo.title;
-      image.width = photo.width;
-      image.height = photo.height;
-      image.loading = 'lazy';
-      image.decoding = 'async';
-      image.addEventListener('error', () => { image.classList.add('broken'); image.alt = `图片暂时无法加载：${photo.title}`; });
-      const icon = document.createElement('span');
-      icon.className = 'photo-open';
-      icon.textContent = '↗';
-      icon.setAttribute('aria-hidden', 'true');
-      button.append(image, icon);
-      button.addEventListener('click', () => openPhoto(index, filtered));
-      const meta = document.createElement('div');
-      meta.className = 'photo-meta';
-      const title = document.createElement('h3');
-      title.textContent = photo.title;
-      title.title = photo.name;
-      const tag = document.createElement('span');
-      tag.textContent = photo.category;
-      meta.append(title, tag);
-      const detail = document.createElement('p');
-      detail.className = 'photo-subtitle';
-      detail.textContent = `${photo.width} × ${photo.height} / ${photo.name.split('.').pop().toUpperCase()}`;
-      card.append(button, meta, detail);
-      fragment.append(card);
+    filtered.slice(0, visible).forEach((photo, index) => {
+      const card = element('article', 'photo-card');
+      const button = element('button', 'photo-button'); button.setAttribute('aria-label', `放大 ${photo.title}`);
+      const image = element('img'); image.src = photo.thumb; image.alt = photo.title; image.width = photo.width; image.height = photo.height; image.loading = 'lazy'; image.decoding = 'async';
+      image.addEventListener('error', () => { image.classList.add('broken'); image.alt = `${photo.title} · 图片暂时无法加载`; });
+      const arrow = element('span', 'photo-open', '↗'); arrow.setAttribute('aria-hidden', 'true');
+      button.append(image, arrow); button.addEventListener('click', () => openPhoto(index, filtered));
+      const meta = element('div', 'photo-meta'); meta.append(element('h3', '', photo.title), element('p', '', locationText(photo)));
+      card.append(button, meta); fragment.append(card);
     });
-    grid.replaceChildren(fragment);
-    $('#result-count').textContent = `共 ${photos.length} 张照片 · 正在展示 ${filtered.length} 张`;
-    $('#empty-state').hidden = filtered.length > 0;
-    $('#end-note').textContent = filtered.length ? '每个平凡的瞬间，都有自己的光。' : '下一段记忆，就在别处。';
+    grid.replaceChildren(fragment); layout();
+    const topic = topicById.get(topicId);
+    $('#result-count').textContent = topic.count ? `${filtered.length} / ${topic.count} 张照片` : '留待下一段故事';
+    $('#empty-state').hidden = !!filtered.length;
+    const waiting = !topic.count;
+    $('.empty-number').hidden = !waiting;
+    $('.empty-number').textContent = String(topics.findIndex(t => t.id === topicId) + 1).padStart(2, '0');
+    $('#empty-eyebrow').textContent = waiting ? 'TO BE CONTINUED' : 'A LITTLE FURTHER';
+    $('#empty-title').textContent = waiting ? '这一章，留给未来的回忆。' : '还没找到这段光影';
+    $('#empty-description').textContent = waiting ? '不急着填满，值得收藏的瞬间会慢慢到来。' : '换个关键词，或重新选择地点与画幅。';
+    $('#reset-filters').hidden = waiting;
+    $('#load-more-wrap').hidden = !filtered.length;
+    $('#load-more').hidden = visible >= filtered.length;
+    $('#loaded-count').textContent = visible >= filtered.length ? `已展开全部 ${filtered.length} 张照片` : `已展开 ${visible} 张，共 ${filtered.length} 张`;
   }
-  function updatePhoto() {
-    const photo = viewing[current];
-    const image = $('#lightbox-image');
-    image.src = photo.src;
-    image.alt = photo.title;
-    $('#lightbox-title').textContent = photo.title;
-    $('#lightbox-details').textContent = `${photo.category} · 原图 ${photo.width} × ${photo.height}`;
-    $('#lightbox-counter').textContent = `${String(current + 1).padStart(2, '0')} / ${viewing.length}`;
-    $('#download-photo').href = photo.src;
-    $('#download-photo').download = `${photo.title}.webp`;
-    $('#download-photo').title = '保存网页优化版图片（最长边 2400 像素）';
-  }
-  function openPhoto(index, list) {
-    viewing = list.slice();
-    current = index;
-    updatePhoto();
-    $('#lightbox').showModal();
-    document.body.classList.add('dialog-open');
-  }
-  function movePhoto(delta) {
-    current = (current + delta + viewing.length) % viewing.length;
-    updatePhoto();
-  }
-  $('#hero-photo').addEventListener('click', () => openPhoto(photos.indexOf(hero), photos));
-  $('#prev-photo').addEventListener('click', () => movePhoto(-1));
-  $('#next-photo').addEventListener('click', () => movePhoto(1));
-  $('#close-lightbox').addEventListener('click', () => $('#lightbox').close());
-  $('#lightbox').addEventListener('keydown', event => {
-    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-      event.preventDefault();
-      movePhoto(event.key === 'ArrowLeft' ? -1 : 1);
-    }
-  });
-  let touchStart = null;
-  $('#lightbox-image').addEventListener('touchstart', event => { touchStart = {x: event.changedTouches[0].clientX, y: event.changedTouches[0].clientY}; }, {passive: true});
-  $('#lightbox-image').addEventListener('touchend', event => {
-    if (!touchStart) return;
-    const deltaX = event.changedTouches[0].clientX - touchStart.x;
-    const deltaY = event.changedTouches[0].clientY - touchStart.y;
-    if (Math.abs(deltaX) > 60 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) movePhoto(deltaX < 0 ? 1 : -1);
-    touchStart = null;
-  }, {passive: true});
-  document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => {
-    group = tab.dataset.group;
-    $('#album-select').value = 'all';
-    document.querySelectorAll('.tab').forEach(item => {
-      item.classList.toggle('active', item === tab);
-      item.setAttribute('aria-pressed', String(item === tab));
-    });
-    [...$('#album-select').options].forEach(option => {
-      option.hidden = option.value !== 'all' && group !== 'all' && !photos.some(photo => photo.category === option.value && groupFor(photo) === group);
-    });
-    render();
-  }));
-  $('#search').addEventListener('input', render);
-  $('#album-select').addEventListener('change', render);
-  $('#reset-filters').addEventListener('click', () => {
-    $('#search').value = '';
-    $('[data-group="all"]').click();
-  });
+  $('#search').addEventListener('input', () => { visible = 36; render(); });
+  $('#orientation').addEventListener('change', () => { visible = 36; render(); });
+  $('#reset-filters').addEventListener('click', () => selectTopic(topicId));
+  $('#load-more').addEventListener('click', () => { const oldVisible = visible; visible += 36; render(); grid.children[oldVisible]?.querySelector('button').focus({preventScroll: true}); });
   for (const mode of ['comfort', 'compact']) {
     $(`#grid-${mode}`).addEventListener('click', () => {
       grid.classList.toggle('compact', mode === 'compact');
-      for (const other of ['comfort', 'compact']) {
-        $(`#grid-${other}`).classList.toggle('active', other === mode);
-        $(`#grid-${other}`).setAttribute('aria-pressed', String(other === mode));
-      }
+      for (const other of ['comfort', 'compact']) { $(`#grid-${other}`).classList.toggle('active', mode === other); $(`#grid-${other}`).setAttribute('aria-pressed', String(mode === other)); }
+      layout();
     });
   }
+  function updatePhoto() {
+    const photo = viewing[current];
+    $('#lightbox-image').src = photo.src; $('#lightbox-image').alt = photo.title;
+    $('#lightbox-title').textContent = photo.title;
+    $('#lightbox-details').textContent = `${topicById.get(photo.topic).name} / ${locationText(photo)}`;
+    $('#lightbox-counter').textContent = `${String(current + 1).padStart(2, '0')} / ${viewing.length}`;
+    $('#download-photo').href = photo.src; $('#download-photo').download = `${photo.title}.webp`;
+    $('#prev-photo').disabled = $('#next-photo').disabled = viewing.length < 2;
+  }
+  function openPhoto(index, list) { viewing = list.slice(); current = index; updatePhoto(); $('#lightbox').showModal(); document.body.classList.add('dialog-open'); }
+  function move(delta) { current = (current + delta + viewing.length) % viewing.length; updatePhoto(); }
+  $('#hero-photo').addEventListener('click', () => { const list = photos.filter(p => p.topic === hero.topic); openPhoto(list.indexOf(hero), list); });
+  $('#prev-photo').addEventListener('click', () => move(-1)); $('#next-photo').addEventListener('click', () => move(1));
+  $('#close-lightbox').addEventListener('click', () => $('#lightbox').close());
+  $('#lightbox').addEventListener('keydown', event => { if (['ArrowLeft', 'ArrowRight'].includes(event.key)) { event.preventDefault(); move(event.key === 'ArrowLeft' ? -1 : 1); } });
+  let touch = null;
+  $('#lightbox-image').addEventListener('touchstart', event => { touch = event.changedTouches[0]; }, {passive: true});
+  $('#lightbox-image').addEventListener('touchend', event => { if (!touch) return; const dx = event.changedTouches[0].clientX - touch.clientX, dy = event.changedTouches[0].clientY - touch.clientY; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) move(dx < 0 ? 1 : -1); touch = null; }, {passive: true});
   $('#about-button').addEventListener('click', () => { $('#about-dialog').showModal(); document.body.classList.add('dialog-open'); });
   $('#close-about').addEventListener('click', () => $('#about-dialog').close());
   document.querySelectorAll('dialog').forEach(dialog => dialog.addEventListener('close', () => document.body.classList.remove('dialog-open')));
-  render();
+  selectTopic(topicId);
 })();

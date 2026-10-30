@@ -3,54 +3,69 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f7f7f2">
-  <meta name="description" content="光影集：收藏旅途、山野、城市与日常的摄影相册。">
-  <title>光影集 · 把瞬间留在这里</title>
+  <meta name="theme-color" content="#f5f3ed">
+  <meta name="description" content="光影集，一本私人的摄影手记。天南海北、重庆邮电大学、从你的世界路过并截下一帧、一些回忆：把走过的路和珍惜的人，留在光里。">
+  <title>光影集 · 山川与青春的摄影手记</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <script src="gallery-data.js" defer></script>
   <script src="app.js" defer></script>
+  <script src="music-config.js" defer></script>
+  <script src="music.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#collection">跳到照片集</a>
   <header class="site-header wrap">
-    <a class="brand" href="#" aria-label="光影集首页"><span class="brand-icon">◈</span> 光影集<span class="brand-en">LIGHT & LIFE</span></a>
-    <nav aria-label="主导航"><a href="#collection" class="nav-active">摄影集 <span>↗</span></a><button id="about-button" class="text-button">关于相册</button></nav>
-    <span class="header-note"><i></i> 生活，值得被记录</span>
+    <a class="brand" href="#top" aria-label="光影集首页"><span class="brand-symbol" aria-hidden="true">◈</span><span>光影集<small>LIGHT & LIFE</small></span></a>
+    <nav aria-label="主导航"><a href="#topics">摄影篇章</a><a href="#collection">浏览照片</a><button id="about-button">关于</button></nav>
+    <span class="header-note">一册光影，慢慢收藏。</span>
   </header>
-  <main>
+  <main id="top">
     <section class="hero wrap" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <p class="eyebrow"><span></span> A PERSONAL PHOTO JOURNAL</p>
-        <h1 id="hero-title">走过的地方，<br>留下的<span class="title-accent">光。</span></h1>
-        <p class="hero-description">山野的风，城市的光，和那些平凡却闪亮的日常。<br>用镜头收藏片刻，让记忆有迹可循。</p>
-        <a class="primary-link" href="#collection">翻开我的相册 <span>↗</span></a>
-        <div class="hero-stats"><div><strong id="total-count">—</strong><span>定格瞬间</span></div><div><strong id="category-count">—</strong><span>光影篇章</span></div><p>每一张照片，<br>都是一个故事。</p></div>
+        <p class="eyebrow"><span class="tiny-line"></span> A PERSONAL PHOTO JOURNAL</p>
+        <h1 id="hero-title">把山川与青春，<br>留在<span>光里。</span></h1>
+        <p class="hero-description">有些风景，走过就不想忘记。<br>有些日子，回头看依然闪亮。<br>这是我的旅途，也是我的生活。</p>
+        <a class="primary-link" href="#topics">从这里翻开 <span aria-hidden="true">↗</span></a>
+        <div class="hero-stats"><span><strong id="total-count">—</strong> 个瞬间</span><span><strong id="topic-count">—</strong> 个篇章</span></div>
       </div>
-      <button class="hero-photo" id="hero-photo" aria-label="放大封面照片">
-        <img id="hero-image" alt="" fetchpriority="high">
-        <span class="hero-photo-top"><span>FEATURED FRAME</span><span>01 / JOURNAL</span></span>
-        <span class="hero-photo-caption"><span><small>山野来信 · 川西</small><strong>去有风的旷野</strong></span><span class="circle-arrow">↗</span></span>
-      </button>
+      <figure class="hero-frame">
+        <button id="hero-photo" aria-label="放大封面照片"><img id="hero-image" alt="" fetchpriority="high" width="5568" height="3712"><span class="hero-badge">光影集 / 精选一帧</span><span class="hero-open" aria-hidden="true">↗</span></button>
+        <figcaption><span><span class="caption-dot"></span><strong id="hero-name">落日在山间停留</strong></span><span id="hero-location"></span></figcaption>
+      </figure>
     </section>
-    <section class="collection wrap" id="collection" aria-labelledby="collection-title">
-      <div class="section-heading"><div><p class="eyebrow">THE COLLECTION</p><h2 id="collection-title">光影里的故事<span id="heading-count"></span></h2></div><p>从一个瞬间，回到一段时光。</p></div>
-      <div class="collection-toolbar">
-        <div class="tabs" role="group" aria-label="按主题筛选"><button class="tab active" data-group="all" aria-pressed="true">全部照片 <span id="tab-count"></span></button><button class="tab" data-group="travel" aria-pressed="false">山川与旅途</button><button class="tab" data-group="people" aria-pressed="false">人像与青春</button><button class="tab" data-group="daily" aria-pressed="false">城市与日常</button></div>
-        <label class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input id="search" type="search" placeholder="寻找一段记忆…" aria-label="搜索照片名称或地点"></label>
-      </div>
-      <div class="collection-options"><p id="result-count" role="status" aria-live="polite">正在展开相册…</p><div><label class="album-label" for="album-select">篇章</label><select id="album-select" aria-label="选择相册篇章"><option value="all">所有篇章</option></select><span class="view-divider"></span><button id="grid-comfort" class="view-button active" aria-label="舒展布局" aria-pressed="true"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 2h6v6H2zM12 2h6v6h-6zM2 12h6v6H2zM12 12h6v6h-6z"/></svg></button><button id="grid-compact" class="view-button" aria-label="紧凑布局" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M1 2h4v6H1zM8 2h4v6H8zM15 2h4v6h-4zM1 12h4v6H1zM8 12h4v6H8zM15 12h4v6h-4z"/></svg></button></div></div>
-      <div class="photo-grid" id="photo-grid"></div>
-      <div class="empty-state" id="empty-state" hidden><span>⌕</span><h3>还没找到这段记忆</h3><p>换个关键词，或看看其他篇章。</p><button id="reset-filters">查看全部照片 ↗</button></div>
-      <div class="collection-end"><span></span><p id="end-note">每个平凡的瞬间，都有自己的光。</p><span></span></div>
+    <section id="topics" class="topics wrap" aria-labelledby="topics-title">
+      <div class="section-heading"><div><p class="eyebrow">MANY CHAPTERS, ONE JOURNAL</p><h2 id="topics-title">故事，在光影里相逢。</h2></div><span class="section-side">去远方 · 回校园 · 遇见你 · 存回忆</span></div>
+      <div id="topic-cards" class="topic-cards"></div>
+    </section>
+    <section id="collection" class="collection wrap" aria-labelledby="collection-title">
+      <div class="collection-topline"><p class="eyebrow">THE PHOTO COLLECTION</p><span class="section-side">横竖之间，都是完整的记忆。</span></div>
+      <div class="collection-toolbar"><div id="topic-tabs" class="topic-tabs" role="group" aria-label="选择摄影专题"></div><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="搜索照片、地点或故事…" aria-label="搜索当前专题的照片名称或地点"></label></div>
+      <div class="collection-heading"><div><h2 id="collection-title"></h2><p id="collection-intro"></p></div><span id="result-count" role="status" aria-live="polite"></span></div>
+      <div id="filter-bar" class="filter-bar"><div id="location-filters" class="location-filters" role="group" aria-label="按地点或篇章筛选"></div><div class="display-options"><select id="orientation" aria-label="筛选照片方向"><option value="all">全部画幅</option><option value="portrait">竖幅照片</option><option value="landscape">横幅照片</option></select><span class="divider"></span><button id="grid-comfort" class="view-button active" aria-pressed="true" aria-label="舒展布局">▦</button><button id="grid-compact" class="view-button" aria-pressed="false" aria-label="紧凑布局">▥</button></div></div>
+      <div id="photo-grid" class="photo-grid"></div>
+      <div id="empty-state" class="empty-state" hidden><span class="empty-number"></span><p class="eyebrow" id="empty-eyebrow">TO BE CONTINUED</p><h3 id="empty-title">这一章，留给未来的回忆。</h3><p id="empty-description">不急着填满，值得收藏的瞬间会慢慢到来。</p><button id="reset-filters" class="secondary-link">重新浏览这个专题 ↗</button></div>
+      <div id="load-more-wrap" class="load-more-wrap"><button id="load-more" class="secondary-link">再翻一些照片 <span aria-hidden="true">↓</span></button><span id="loaded-count"></span></div>
+      <div class="collection-end"><span></span><p>每一个普通的日子，都有自己的光。</p><span></span></div>
     </section>
   </main>
-  <footer class="wrap"><a class="brand footer-brand" href="#">◈ 光影集</a><p>在路上，也在生活里。<span>LIGHT & LIFE · PHOTO JOURNAL</span></p><a href="#">回到顶部 ↑</a></footer>
+  <footer class="wrap"><a class="brand footer-brand" href="#top">◈ 光影集</a><p>在路上，也在生活里。<small>LIGHT & LIFE · A PERSONAL JOURNAL</small></p><a href="#top">回到顶部 ↑</a></footer>
   <dialog id="lightbox" class="lightbox" aria-label="照片查看器">
     <div class="lightbox-bar"><span id="lightbox-counter"></span><div><a id="download-photo" download>保存图片 ↓</a><button id="close-lightbox" autofocus aria-label="关闭照片查看器">×</button></div></div>
     <div class="lightbox-stage"><button id="prev-photo" class="photo-nav prev" aria-label="上一张照片">←</button><img id="lightbox-image" alt=""><button id="next-photo" class="photo-nav next" aria-label="下一张照片">→</button></div>
-    <div class="lightbox-caption"><h2 id="lightbox-title"></h2><p id="lightbox-details"></p><span>← → 切换照片 · ESC 关闭</span></div>
+    <div class="lightbox-caption"><h2 id="lightbox-title"></h2><p id="lightbox-details"></p><span>← → 切换 · ESC 关闭 · 手机上左右滑动</span></div>
   </dialog>
-  <dialog id="about-dialog" class="about-dialog" aria-labelledby="about-title"><button class="about-close" id="close-about" aria-label="关闭关于相册">×</button><p class="eyebrow">ABOUT THIS JOURNAL</p><h2 id="about-title">把瞬间留在这里。</h2><p>这是一本关于旅行与日常的光影手记。每一张照片，都是曾经走过的路、看过的风景，以及值得珍藏的人和事。</p><p>选择主题或篇章，寻找喜欢的照片。点击图片可放大浏览，也可以用键盘左右方向键翻页。</p><span class="about-signature">光影集 / LIGHT & LIFE</span></dialog>
-  <noscript><p class="wrap">此相册需要启用浏览器 JavaScript 才能显示图片。</p></noscript>
+  <dialog id="about-dialog" class="about-dialog" aria-labelledby="about-title"><button id="close-about" class="about-close" aria-label="关闭关于相册">×</button><p class="eyebrow">ABOUT THIS JOURNAL</p><h2 id="about-title">把喜欢的日子，<br>再过一遍。</h2><p>「天南海北」收藏旅途中的山川与烟火；「重庆邮电大学」记下南山上的四季与青春；「从你的世界路过并截下一帧」珍藏偶然相逢的身影；「一些回忆」留下相聚、告别与共同走过的日子。</p><p>每张照片都有一个属于自己的名字。选择专题、地点或画幅，点击照片，就能回到那个瞬间。</p><span class="about-signature">光影集 / LIGHT & LIFE</span></dialog>
+  <aside id="music-player" class="music-player" aria-label="背景音乐" hidden>
+    <div class="music-summary"><span class="music-note" aria-hidden="true">♫</span><div><strong id="music-title"></strong><span id="music-artist"></span></div><button id="music-toggle" class="music-toggle" aria-label="播放背景音乐" disabled>▶</button><button id="music-expand" aria-label="展开音乐设置" aria-expanded="false" aria-controls="music-settings">⌄</button></div>
+    <div id="music-settings" class="music-settings" hidden>
+      <p id="music-status" role="status" aria-live="polite"></p>
+      <label class="music-volume-label">音量<input id="music-volume" type="range" min="0" max="100" value="30" aria-label="背景音乐音量"></label>
+      <label class="music-loop-label"><input id="music-loop" type="checkbox" checked> 列表循环</label>
+      <label id="music-file-label" class="music-file-label" hidden>选择本机音频<input id="music-file" type="file" accept=".mp3,.m4a,.wav,.ogg,.aac,.flac,audio/*"></label>
+    </div>
+    <audio id="background-music" preload="none"></audio>
+  </aside>
+  <noscript><p class="wrap">请启用浏览器 JavaScript 以浏览照片。</p></noscript>
 </body>
 </html>
