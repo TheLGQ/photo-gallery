@@ -12,7 +12,9 @@ window.GALLERY_MUSIC = {
     ],
     passing: [],
     memories: [
-      { title: '凤凰花开的路口', artist: '林志炫', src: 'music/feng-huang-hua-kai-de-lu-kou.mp3' }
+      { title: '凤凰花开的路口', artist: '林志炫', src: 'music/feng-huang-hua-kai-de-lu-kou.mp3' },
+      { title: '刚好遇见你', artist: '李玉刚', src: 'music/gang-hao-yu-jian-ni.mp3' },
+      { title: '海阔天空', artist: 'BEYOND', src: 'music/hai-kuo-tian-kong.mp3' }
     ]
   }
 };
