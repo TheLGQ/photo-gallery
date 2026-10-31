@@ -10,7 +10,10 @@ window.GALLERY_MUSIC = {
       { title: '晴天', artist: '周杰伦', src: 'music/qing-tian.mp3' },
       { title: '简单爱', artist: '周杰伦', src: 'music/jian-dan-ai.mp3' }
     ],
-    passing: [],
+    passing: [
+      { title: 'Bleeding Love', artist: 'Ni/Co', src: 'music/bleeding-love.mp3' },
+      { title: '老人と海（老人与海）', artist: 'ヨルシカ', src: 'music/roujin-to-umi.mp3' }
+    ],
     memories: [
       { title: '凤凰花开的路口', artist: '林志炫', src: 'music/feng-huang-hua-kai-de-lu-kou.mp3' },
       { title: '刚好遇见你', artist: '李玉刚', src: 'music/gang-hao-yu-jian-ni.mp3' },
