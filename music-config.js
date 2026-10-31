@@ -8,7 +8,9 @@ window.GALLERY_MUSIC = {
     ],
     campus: [
       { title: '晴天', artist: '周杰伦', src: 'music/qing-tian.mp3' },
-      { title: '简单爱', artist: '周杰伦', src: 'music/jian-dan-ai.mp3' }
+      { title: '简单爱', artist: '周杰伦', src: 'music/jian-dan-ai.mp3' },
+      { title: '平凡之路', artist: '朴树', src: 'music/ping-fan-zhi-lu.mp3' },
+      { title: '起风了', artist: '周深', src: 'music/qi-feng-le.mp3' }
     ],
     passing: [
       { title: 'Bleeding Love', artist: 'Ni/Co', src: 'music/bleeding-love.mp3' },
