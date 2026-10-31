@@ -7,6 +7,7 @@
   const byId = new Map(photos.map(p => [p.id, p]));
   const topicById = new Map(topics.map(t => [t.id, t]));
   let topicId = topics[0].id, location = 'all', filtered = [], visible = 36, viewing = [], current = 0;
+  let lastFilterKey = '';
   const element = (tag, className, text) => { const node = document.createElement(tag); if (className) node.className = className; if (text !== undefined) node.textContent = text; return node; };
   const locationText = p => [p.location, p.caption].filter(Boolean).join(' · ');
   $('#total-count').textContent = photos.length;
@@ -71,9 +72,14 @@
   function render() {
     const query = $('#search').value.trim().toLocaleLowerCase();
     const orientation = $('#orientation').value;
-    filtered = photos.filter(p => p.topic === topicId && (location === 'all' || p.location === location)
-      && (orientation === 'all' || (orientation === 'portrait' ? p.height > p.width : p.width >= p.height))
-      && `${p.title} ${p.location} ${p.caption} ${topicById.get(p.topic).name}`.toLocaleLowerCase().includes(query));
+    const filterKey = JSON.stringify([topicId, location, orientation, query]);
+    if (filterKey !== lastFilterKey) {
+      const matches = photos.filter(p => p.topic === topicId && (location === 'all' || p.location === location)
+        && (orientation === 'all' || (orientation === 'portrait' ? p.height > p.width : p.width >= p.height))
+        && `${p.title} ${p.location} ${p.caption} ${topicById.get(p.topic).name}`.toLocaleLowerCase().includes(query));
+      filtered = window.GalleryOrder.arrange(matches);
+      lastFilterKey = filterKey;
+    }
     document.querySelectorAll('.location-filter').forEach(button => { const active = button.dataset.location === location; button.classList.toggle('active', active); button.setAttribute('aria-pressed', String(active)); });
     const fragment = document.createDocumentFragment();
     filtered.slice(0, visible).forEach((photo, index) => {
@@ -123,7 +129,7 @@
   }
   function openPhoto(index, list) { viewing = list.slice(); current = index; updatePhoto(); $('#lightbox').showModal(); document.body.classList.add('dialog-open'); }
   function move(delta) { current = (current + delta + viewing.length) % viewing.length; updatePhoto(); }
-  $('#hero-photo').addEventListener('click', () => { const list = photos.filter(p => p.topic === hero.topic); openPhoto(list.indexOf(hero), list); });
+  $('#hero-photo').addEventListener('click', () => { const list = window.GalleryOrder.arrange(photos.filter(p => p.topic === hero.topic)); openPhoto(list.indexOf(hero), list); });
   $('#prev-photo').addEventListener('click', () => move(-1)); $('#next-photo').addEventListener('click', () => move(1));
   $('#close-lightbox').addEventListener('click', () => $('#lightbox').close());
   $('#lightbox').addEventListener('keydown', event => { if (['ArrowLeft', 'ArrowRight'].includes(event.key)) { event.preventDefault(); move(event.key === 'ArrowLeft' ? -1 : 1); } });
