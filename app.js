@@ -30,14 +30,19 @@
     cover.append(element('span', 'chapter-number', String(index + 1).padStart(2, '0')));
     const heading = element('div', 'topic-heading'); heading.append(element('h3', '', topic.name), element('span', '', topic.count ? `${topic.count} 张 ↗` : '待续 ↗'));
     card.append(cover, heading, element('p', 'topic-note', topic.note));
-    card.addEventListener('click', () => selectTopic(topic.id));
+    card.addEventListener('click', event => {
+      event.preventDefault();
+      if (window.location.hash !== '#collection') history.pushState(null, '', '#collection');
+      $('#collection').scrollIntoView({behavior: 'instant', block: 'start'});
+      selectTopic(topic.id, true);
+    });
     $('#topic-cards').append(card);
     const tab = element('button', 'topic-tab', topic.name); tab.dataset.topic = topic.id;
     tab.append(element('small', '', topic.count || '待续'));
-    tab.addEventListener('click', () => selectTopic(topic.id)); $('#topic-tabs').append(tab);
+    tab.addEventListener('click', () => selectTopic(topic.id, true)); $('#topic-tabs').append(tab);
   });
 
-  function selectTopic(id) {
+  function selectTopic(id, promptMusic = false) {
     topicId = id; location = 'all'; visible = 36;
     $('#search').value = ''; $('#orientation').value = 'all';
     const topic = topicById.get(id);
@@ -56,7 +61,7 @@
     });
     render();
     document.body.dataset.activeTopic = id;
-    window.dispatchEvent(new CustomEvent('gallery:topicchange', {detail: {id}}));
+    window.dispatchEvent(new CustomEvent('gallery:topicchange', {detail: {id, promptMusic}}));
   }
 
   function layout() {

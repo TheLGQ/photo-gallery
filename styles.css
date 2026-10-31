@@ -18,3 +18,19 @@
 @media(min-width:761px) and (max-width:1100px){.topic-cards{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:28px}.collection-toolbar .search{width:100%}}
 @media(max-width:760px){.topic-cards{grid-template-columns:1fr;gap:23px}.topic-heading{flex-wrap:wrap;row-gap:0;margin-top:0}.topic-heading h3{font-size:20px}.topic-heading>span{padding-top:0}.topic-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.topic-tab{white-space:normal;text-align:left;line-height:1.7;padding:11px 12px;overflow-wrap:anywhere}.topic-tab small{white-space:nowrap}.collection-heading{flex-wrap:wrap;gap:6px}.collection-heading h2{font-size:25px}.collection-heading p{max-width:none}#result-count{margin-top:0}.search{margin-left:0}}
 @media(max-width:370px){.topic-heading h3{font-size:18px}.topic-tab{font-size:11px;padding:10px}}
+
+/* A fresh, explicit music choice whenever a chapter is opened. */
+.music-choice{width:min(440px,calc(100vw - 32px));max-height:calc(100dvh - 32px);padding:36px 32px 30px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:4px;box-shadow:0 20px 80px #0d171233;overflow:auto}
+.music-choice::backdrop{background:#10271c99;backdrop-filter:blur(5px)}
+.music-choice-close{position:absolute;right:12px;top:10px;width:40px;height:40px;font-size:27px;color:var(--muted)}
+.music-choice-note{display:grid;place-items:center;width:44px;height:44px;border:1px solid var(--line);border-radius:50%;font-size:27px;color:var(--orange)}
+.music-choice h2{font-size:27px;line-height:1.5;letter-spacing:0;margin:20px 0 12px}
+.music-choice-topic{font-size:14px;line-height:1.8;margin:0 0 12px;overflow-wrap:anywhere}
+#music-choice-description{font-size:12px;line-height:1.9;color:var(--muted);margin:0}
+.music-choice-actions{display:flex;gap:12px;margin-top:27px}
+.music-choice-actions button{flex:1;min-height:46px;padding:11px 12px;border:1px solid #aeb9a8;font-size:13px}
+#music-choice-skip:hover{background:#e7eadd}
+#music-choice-play{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+#music-choice-play:hover{background:#40604e}
+#music-choice-play span{margin-left:8px}
+@media(max-width:370px){.music-choice{padding:30px 22px 24px}.music-choice h2{font-size:24px}.music-choice-actions{gap:10px}}
