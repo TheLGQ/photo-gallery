@@ -7,7 +7,7 @@
   let topicId = null, clips = [], visible = 4, current = 0, revision = 0;
   let location = 'all', query = '';
   const copy = {
-    travel: {title: '旅途片段', intro: '走过山间石阶，也看过一座城的灯火。'},
+    travel: {title: '旅途片段', intro: '看山川起伏，湖水铺开，也看一座城的灯火。'},
     campus: {title: '校园片段', intro: '让那些熟悉的身影，再走过一次青春。'}
   };
   const element = (tag, className, text) => {

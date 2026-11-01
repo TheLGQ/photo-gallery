@@ -110,6 +110,12 @@
     $('#empty-eyebrow').textContent = waiting ? 'TO BE CONTINUED' : 'A LITTLE FURTHER';
     $('#empty-title').textContent = waiting ? '这一章，留给未来的回忆。' : '还没找到这段光影';
     $('#empty-description').textContent = waiting ? '不急着填满，值得收藏的瞬间会慢慢到来。' : '换个关键词，或重新选择地点与画幅。';
+    if (!filtered.length && videos.some(video => video.topic === topicId
+      && (location === 'all' || video.location === location)
+      && `${video.title} ${video.caption} ${video.location || ''} ${video.place || ''}`.toLocaleLowerCase().includes(query))) {
+      $('#empty-title').textContent = '这里暂时没有照片';
+      $('#empty-description').textContent = '上方有对应的视频，可以继续观看这段风景。';
+    }
     $('#reset-filters').hidden = waiting;
     $('#load-more-wrap').hidden = !filtered.length;
     $('#load-more').hidden = visible >= filtered.length;
