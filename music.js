@@ -8,6 +8,7 @@
   const local = location.protocol === 'file:' || ['127.0.0.1', 'localhost', '[::1]'].includes(location.hostname);
   const temporaryTracks = new Map();
   let activeTopic = null, revision = 0, playbackAllowed = false;
+  let videoOpen = false, resumeAfterVideo = false, videoRevision = null;
   let playlist = [], trackIndex = 0, repeatPlaylist = true;
   const status = text => { $('music-status').textContent = text; };
   const settings = open => {
@@ -22,7 +23,7 @@
     player.classList.toggle('is-playing', playing);
   }
   async function play() {
-    if (!playbackAllowed || !audio.getAttribute('src')) return;
+    if (!playbackAllowed || videoOpen || !audio.getAttribute('src')) return;
     const attempt = revision;
     try {
       await audio.play();
@@ -100,7 +101,7 @@
   audio.addEventListener('pause', sync);
   audio.addEventListener('ended', () => {
     // Ignore an event left over from a track stopped by a chapter change.
-    if (!playbackAllowed || !audio.ended || !playlist.length) return;
+    if (!playbackAllowed || videoOpen || !audio.ended || !playlist.length) return;
     if (trackIndex + 1 < playlist.length) trackIndex++;
     else if (repeatPlaylist) trackIndex = 0;
     else { sync(); status('播放列表已结束'); return; }
@@ -127,6 +128,20 @@
   });
   window.addEventListener('gallery:topicchange', event => {
     if (event.detail.promptMusic) promptForMusic(event.detail.id);
+  });
+  window.addEventListener('gallery:videochange', event => {
+    if (event.detail.open) {
+      if (videoOpen) return;
+      videoOpen = true;
+      videoRevision = revision;
+      resumeAfterVideo = playbackAllowed && !audio.paused && !audio.ended;
+      audio.pause();
+    } else {
+      const resume = videoOpen && resumeAfterVideo && playbackAllowed && revision === videoRevision && !choice.open;
+      videoOpen = false;
+      resumeAfterVideo = false;
+      if (resume) void play();
+    }
   });
   window.addEventListener('pagehide', () => audio.pause());
   selectTrack(document.body.dataset.activeTopic || topics[0]?.id);

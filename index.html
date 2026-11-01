@@ -7,12 +7,14 @@
   <meta name="description" content="光影集，一本私人的摄影手记。天南海北、重庆邮电大学、从你的世界路过并截下一帧、一些回忆：把走过的路和珍惜的人，留在光里。">
   <title>光影集 · 山川与青春的摄影手记</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=20261031-music-choice">
+  <link rel="stylesheet" href="styles.css?v=20261101-videos">
   <script src="gallery-data.js?v=20261031" defer></script>
+  <script src="video-data.js?v=20261101" defer></script>
   <script src="gallery-order.js?v=20261031" defer></script>
-  <script src="app.js?v=20261031-music-choice" defer></script>
+  <script src="app.js?v=20261101-videos" defer></script>
   <script src="music-config.js?v=20261031-campus" defer></script>
-  <script src="music.js?v=20261031-music-choice" defer></script>
+  <script src="music.js?v=20261101-videos" defer></script>
+  <script src="videos.js?v=20261101" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#collection">跳到照片集</a>
@@ -43,6 +45,13 @@
       <div class="collection-topline"><p class="eyebrow">THE PHOTO COLLECTION</p><span class="section-side">横竖之间，都是完整的记忆。</span></div>
       <div class="collection-toolbar"><div id="topic-tabs" class="topic-tabs" role="group" aria-label="选择摄影专题"></div><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="搜索照片、地点或故事…" aria-label="搜索当前专题的照片名称或地点"></label></div>
       <div class="collection-heading"><div><h2 id="collection-title"></h2><p id="collection-intro"></p></div><span id="result-count" role="status" aria-live="polite"></span></div>
+      <section id="chapter-videos" class="chapter-videos" aria-labelledby="chapter-videos-title" hidden>
+        <div class="video-section-heading"><div><p class="eyebrow">MOMENTS IN MOTION</p><h3 id="chapter-videos-title">校园片段</h3></div><span id="video-count"></span></div>
+        <p class="video-intro">让那些熟悉的身影，再走过一次青春。</p>
+        <div id="video-grid" class="video-grid"></div>
+        <button id="more-videos" class="secondary-link" hidden></button>
+      </section>
+      <h3 id="chapter-photos-title" class="chapter-photos-title" hidden>定格的瞬间 <span>照片集</span></h3>
       <div id="filter-bar" class="filter-bar"><div id="location-filters" class="location-filters" role="group" aria-label="按地点或篇章筛选"></div><div class="display-options"><select id="orientation" aria-label="筛选照片方向"><option value="all">全部画幅</option><option value="portrait">竖幅照片</option><option value="landscape">横幅照片</option></select><span class="divider"></span><button id="grid-comfort" class="view-button active" aria-pressed="true" aria-label="舒展布局">▦</button><button id="grid-compact" class="view-button" aria-pressed="false" aria-label="紧凑布局">▥</button></div></div>
       <div id="photo-grid" class="photo-grid"></div>
       <div id="empty-state" class="empty-state" hidden><span class="empty-number"></span><p class="eyebrow" id="empty-eyebrow">TO BE CONTINUED</p><h3 id="empty-title">这一章，留给未来的回忆。</h3><p id="empty-description">不急着填满，值得收藏的瞬间会慢慢到来。</p><button id="reset-filters" class="secondary-link">重新浏览这个专题 ↗</button></div>
@@ -57,6 +66,12 @@
     <div class="lightbox-caption"><h2 id="lightbox-title"></h2><p id="lightbox-details"></p><span>← → 切换 · ESC 关闭 · 手机上左右滑动</span></div>
   </dialog>
   <dialog id="about-dialog" class="about-dialog" aria-labelledby="about-title"><button id="close-about" class="about-close" aria-label="关闭关于相册">×</button><p class="eyebrow">ABOUT THIS JOURNAL</p><h2 id="about-title">把喜欢的日子，<br>再过一遍。</h2><p>「天南海北」收藏旅途中的山川与烟火；「重庆邮电大学」记下南山上的四季与青春；「从你的世界路过并截下一帧」珍藏偶然相逢的身影；「一些回忆」留下相聚、告别与共同走过的日子。</p><p>每张照片都有一个属于自己的名字。选择专题、地点或画幅，点击照片，就能回到那个瞬间。</p><span class="about-signature">光影集 / LIGHT & LIFE</span></dialog>
+  <dialog id="video-dialog" class="video-dialog" aria-labelledby="video-title">
+    <div class="video-dialog-bar"><span id="video-position"></span><button id="close-video" autofocus aria-label="关闭视频">×</button></div>
+    <video id="chapter-video" controls playsinline preload="none"></video>
+    <div class="video-dialog-caption"><div><h2 id="video-title"></h2><p id="video-caption"></p></div><div class="video-dialog-nav"><button id="prev-video" aria-label="上一段视频">←</button><button id="next-video" aria-label="下一段视频">→</button></div></div>
+    <div id="video-message" class="video-message" hidden><p id="video-status" role="status"></p><button id="retry-video">重新播放</button></div>
+  </dialog>
   <dialog id="music-choice" class="music-choice" aria-labelledby="music-choice-title" aria-describedby="music-choice-topic music-choice-description">
     <button id="music-choice-close" class="music-choice-close" aria-label="暂不播放并关闭">×</button>
     <span class="music-choice-note" aria-hidden="true">♪</span>

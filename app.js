@@ -2,6 +2,7 @@
   'use strict';
   const $ = selector => document.querySelector(selector);
   const {photos = [], topics = []} = window.GALLERY_DATA || {};
+  const videos = window.GALLERY_VIDEOS || [];
   const grid = $('#photo-grid');
   if (!topics.length) { $('#result-count').textContent = '相册数据暂时无法加载，请刷新重试。'; $('#hero-photo').disabled = true; return; }
   const byId = new Map(photos.map(p => [p.id, p]));
@@ -10,7 +11,7 @@
   let lastFilterKey = '';
   const element = (tag, className, text) => { const node = document.createElement(tag); if (className) node.className = className; if (text !== undefined) node.textContent = text; return node; };
   const locationText = p => [p.location, p.caption].filter(Boolean).join(' · ');
-  $('#total-count').textContent = photos.length;
+  $('#total-count').textContent = photos.length + videos.length;
   $('#topic-count').textContent = String(topics.length).padStart(2, '0');
   const hero = byId.get(topics[0].cover) || photos[0];
   if (hero) {
@@ -28,7 +29,9 @@
     if (photo) { const img = element('img'); img.src = photo.thumb; img.alt = `${topic.name}：${photo.title}`; img.width = photo.width; img.height = photo.height; img.loading = 'lazy'; cover.append(img); }
     else { cover.append(element('span', 'blank-frame', '留白'), element('small', 'blank-note', '好的故事，值得等一等。')); }
     cover.append(element('span', 'chapter-number', String(index + 1).padStart(2, '0')));
-    const heading = element('div', 'topic-heading'); heading.append(element('h3', '', topic.name), element('span', '', topic.count ? `${topic.count} 张 ↗` : '待续 ↗'));
+    const videoCount = videos.filter(video => video.topic === topic.id).length;
+    const countText = videoCount ? `${topic.count} 张 · ${videoCount} 段视频` : `${topic.count} 张`;
+    const heading = element('div', 'topic-heading'); heading.append(element('h3', '', topic.name), element('span', '', topic.count || videoCount ? `${countText} ↗` : '待续 ↗'));
     card.append(cover, heading, element('p', 'topic-note', topic.note));
     card.addEventListener('click', event => {
       event.preventDefault();
@@ -38,7 +41,7 @@
     });
     $('#topic-cards').append(card);
     const tab = element('button', 'topic-tab', topic.name); tab.dataset.topic = topic.id;
-    tab.append(element('small', '', topic.count || '待续'));
+    tab.append(element('small', '', videoCount ? countText : topic.count || '待续'));
     tab.addEventListener('click', () => selectTopic(topic.id, true)); $('#topic-tabs').append(tab);
   });
 
@@ -143,6 +146,6 @@
   $('#lightbox-image').addEventListener('touchend', event => { if (!touch) return; const dx = event.changedTouches[0].clientX - touch.clientX, dy = event.changedTouches[0].clientY - touch.clientY; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) move(dx < 0 ? 1 : -1); touch = null; }, {passive: true});
   $('#about-button').addEventListener('click', () => { $('#about-dialog').showModal(); document.body.classList.add('dialog-open'); });
   $('#close-about').addEventListener('click', () => $('#about-dialog').close());
-  document.querySelectorAll('dialog').forEach(dialog => dialog.addEventListener('close', () => document.body.classList.remove('dialog-open')));
+  document.querySelectorAll('dialog').forEach(dialog => dialog.addEventListener('close', () => document.body.classList.toggle('dialog-open', !!document.querySelector('dialog[open]'))));
   selectTopic(topicId);
 })();
