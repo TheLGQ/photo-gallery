@@ -53,8 +53,8 @@
     document.querySelectorAll('.topic-tab').forEach(tab => { const active = tab.dataset.topic === id; tab.classList.toggle('active', active); tab.setAttribute('aria-pressed', String(active)); });
     $('#filter-bar').hidden = !topic.count;
     $('#search').disabled = !topic.count;
-    $('#search').placeholder = topic.count ? '搜索照片、地点或故事…' : '这一章，待续…';
-    const locations = [...new Set(photos.filter(p => p.topic === id).map(p => p.location))];
+    $('#search').placeholder = topic.count ? '搜索照片、视频或地点…' : '这一章，待续…';
+    const locations = [...new Set([...photos, ...videos].filter(p => p.topic === id && p.location).map(p => p.location))];
     $('#location-filters').replaceChildren();
     ['all', ...locations].forEach(value => {
       const button = element('button', 'location-filter', value === 'all' ? '全部' : value);
@@ -114,6 +114,7 @@
     $('#load-more-wrap').hidden = !filtered.length;
     $('#load-more').hidden = visible >= filtered.length;
     $('#loaded-count').textContent = visible >= filtered.length ? `已展开全部 ${filtered.length} 张照片` : `已展开 ${visible} 张，共 ${filtered.length} 张`;
+    window.dispatchEvent(new CustomEvent('gallery:filterchange', {detail: {id: topicId, location, query}}));
   }
   $('#search').addEventListener('input', () => { visible = 36; render(); });
   $('#orientation').addEventListener('change', () => { visible = 36; render(); });
