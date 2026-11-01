@@ -8,7 +8,8 @@
   let location = 'all', query = '';
   const copy = {
     travel: {title: '旅途片段', intro: '看山川起伏，湖水铺开，也看一座城的灯火。'},
-    campus: {title: '校园片段', intro: '让那些熟悉的身影，再走过一次青春。'}
+    campus: {title: '校园片段', intro: '让那些熟悉的身影，再走过一次青春。'},
+    memories: {title: '回忆片段', intro: '灯光会暗下，那些一起走过的时刻会留下。'}
   };
   const element = (tag, className, text) => {
     const node = document.createElement(tag);

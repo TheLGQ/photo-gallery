@@ -56,20 +56,6 @@ window.GALLERY_VIDEOS = [
     "bytes": 6243883
   },
   {
-    "id": "19f22f4c94ba4519",
-    "topic": "campus",
-    "title": "再坐一次熟悉的位置",
-    "caption": "坐回课桌前，把这段日子再留一会儿。",
-    "location": "毕业时光",
-    "place": "重庆邮电大学",
-    "src": "videos/19f22f4c94ba4519.mp4",
-    "poster": "videos/19f22f4c94ba4519.jpg",
-    "width": 1920,
-    "height": 1080,
-    "duration": 28.5,
-    "bytes": 12766255
-  },
-  {
     "id": "867e47b19d393bf4",
     "topic": "campus",
     "title": "把毕业帽抛向天空",
@@ -196,20 +182,6 @@ window.GALLERY_VIDEOS = [
     "bytes": 13100613
   },
   {
-    "id": "b082b0585cec5320",
-    "topic": "travel",
-    "title": "掠过大地的水墨长卷",
-    "caption": "飞过连绵山脊，看灰白荒原向远方铺开。",
-    "location": "青海",
-    "place": "黑独山",
-    "src": "videos/b082b0585cec5320.mp4",
-    "poster": "videos/b082b0585cec5320.jpg",
-    "width": 1920,
-    "height": 1080,
-    "duration": 132.33,
-    "bytes": 63720388
-  },
-  {
     "id": "0d9c61fe6524d4d7",
     "topic": "travel",
     "title": "风把群山雕成了浪",
@@ -320,5 +292,33 @@ window.GALLERY_VIDEOS = [
     "height": 1080,
     "duration": 11.09,
     "bytes": 7371889
+  },
+  {
+    "id": "9cfa085bb0d239c3",
+    "topic": "campus",
+    "title": "青春谢幕，故事未完",
+    "caption": "把熟悉的笑脸与最后的同台，留在这一页青春里。",
+    "location": "毕业时光",
+    "place": "重庆邮电大学",
+    "src": "videos/9cfa085bb0d239c3.mp4",
+    "poster": "videos/9cfa085bb0d239c3.jpg",
+    "width": 1920,
+    "height": 1080,
+    "duration": 151.15,
+    "bytes": 51815682
+  },
+  {
+    "id": "05cbe63e630f730c",
+    "topic": "memories",
+    "title": "灯光亮起，我们还在一起",
+    "caption": "歌声、合影与熟悉的身影，都留在灯光照亮的这一刻。",
+    "location": "毕业时光",
+    "place": "舞台回忆",
+    "src": "videos/05cbe63e630f730c.mp4",
+    "poster": "videos/05cbe63e630f730c.jpg",
+    "width": 1920,
+    "height": 1080,
+    "duration": 392.62,
+    "bytes": 95233867
   }
 ];
