@@ -308,6 +308,20 @@ window.GALLERY_VIDEOS = [
     "bytes": 3150200
   },
   {
+    "id": "f5c251ed0149f1be",
+    "topic": "travel",
+    "title": "从冰雪滑向灯海",
+    "caption": "穿过白昼的冰道与夜色里的彩灯，把冬日的快乐一路滑向远方。",
+    "location": "黑龙江",
+    "place": "哈尔滨 · 冰雪大世界",
+    "src": "videos/f5c251ed0149f1be.mp4",
+    "poster": "videos/f5c251ed0149f1be.jpg",
+    "width": 1920,
+    "height": 1080,
+    "duration": 189.5,
+    "bytes": 56125534
+  },
+  {
     "id": "9cfa085bb0d239c3",
     "topic": "campus",
     "title": "青春谢幕，故事未完",
