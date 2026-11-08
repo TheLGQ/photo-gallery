@@ -294,6 +294,20 @@ window.GALLERY_VIDEOS = [
     "bytes": 7371889
   },
   {
+    "id": "6c367815411f47b7",
+    "topic": "travel",
+    "title": "扬手之间，冰雾成花",
+    "caption": "迎着冬日的光，把一捧热水扬成漫天冰雾。",
+    "location": "黑龙江",
+    "place": "哈尔滨 · 冰雪大世界",
+    "src": "videos/6c367815411f47b7-second-splash-02796a99.mp4",
+    "poster": "videos/6c367815411f47b7-second-splash-02796a99.jpg",
+    "width": 1920,
+    "height": 1080,
+    "duration": 9.47,
+    "bytes": 3150200
+  },
+  {
     "id": "9cfa085bb0d239c3",
     "topic": "campus",
     "title": "青春谢幕，故事未完",
