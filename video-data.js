@@ -216,12 +216,12 @@ window.GALLERY_VIDEOS = [
     "caption": "越过空旷湖岸，水与天在远处相逢。",
     "location": "青甘环线",
     "place": "野湖",
-    "src": "videos/c411ab0e93df1cfe.mp4",
-    "poster": "videos/c411ab0e93df1cfe.jpg",
+    "src": "videos/c411ab0e93df1cfe-highlights-c8ff9ce0.mp4",
+    "poster": "videos/c411ab0e93df1cfe-highlights-c8ff9ce0.jpg",
     "width": 1920,
     "height": 1080,
-    "duration": 107.27000000000001,
-    "bytes": 29210539
+    "duration": 31.93,
+    "bytes": 9834733
   },
   {
     "id": "3a468b93c7f90ea2",
