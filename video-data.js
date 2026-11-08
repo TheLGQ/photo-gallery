@@ -104,12 +104,12 @@ window.GALLERY_VIDEOS = [
     "caption": "从山脚仰望天门，把每一级石阶走进记忆。",
     "location": "湖南",
     "place": "张家界 · 天门山",
-    "src": "videos/0f26cd268e7a8031.mp4",
-    "poster": "videos/0f26cd268e7a8031.jpg",
+    "src": "videos/0f26cd268e7a8031-climb-a3f4a88e.mp4",
+    "poster": "videos/0f26cd268e7a8031-climb-a3f4a88e.jpg",
     "width": 1920,
     "height": 1080,
-    "duration": 133.5,
-    "bytes": 85124797
+    "duration": 97.43,
+    "bytes": 63132397
   },
   {
     "id": "b039c9d6144e4234",
@@ -118,12 +118,12 @@ window.GALLERY_VIDEOS = [
     "caption": "沿着扶栏继续向上，山风与脚步一起作伴。",
     "location": "湖南",
     "place": "张家界 · 天门山",
-    "src": "videos/b039c9d6144e4234.mp4",
-    "poster": "videos/b039c9d6144e4234.jpg",
+    "src": "videos/b039c9d6144e4234-climb-0a40dc95.mp4",
+    "poster": "videos/b039c9d6144e4234-climb-0a40dc95.jpg",
     "width": 1280,
     "height": 720,
-    "duration": 414.90999999999997,
-    "bytes": 95061051
+    "duration": 282.06,
+    "bytes": 76007679
   },
   {
     "id": "e3eaa438f58c8d14",
