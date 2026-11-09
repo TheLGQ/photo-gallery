@@ -13,7 +13,7 @@
   const locationText = p => [p.location, p.caption].filter(Boolean).join(' · ');
   $('#total-count').textContent = photos.length + videos.length;
   $('#topic-count').textContent = String(topics.length).padStart(2, '0');
-  const hero = byId.get(topics[0].cover) || photos[0];
+  const hero = window.GALLERY_DATA.hero || byId.get(topics[0].cover) || photos[0];
   if (hero) {
     $('#hero-image').src = hero.src; $('#hero-image').alt = hero.title;
     $('#hero-image').width = hero.width; $('#hero-image').height = hero.height;
@@ -144,7 +144,7 @@
   }
   function openPhoto(index, list) { viewing = list.slice(); current = index; updatePhoto(); $('#lightbox').showModal(); document.body.classList.add('dialog-open'); }
   function move(delta) { current = (current + delta + viewing.length) % viewing.length; updatePhoto(); }
-  $('#hero-photo').addEventListener('click', () => { const list = window.GalleryOrder.arrange(photos.filter(p => p.topic === hero.topic)); openPhoto(list.indexOf(hero), list); });
+  $('#hero-photo').addEventListener('click', () => { if (window.GALLERY_DATA.hero) { openPhoto(0, [hero]); return; } const list = window.GalleryOrder.arrange(photos.filter(p => p.topic === hero.topic)); openPhoto(list.indexOf(hero), list); });
   $('#prev-photo').addEventListener('click', () => move(-1)); $('#next-photo').addEventListener('click', () => move(1));
   $('#close-lightbox').addEventListener('click', () => $('#lightbox').close());
   $('#lightbox').addEventListener('keydown', event => { if (['ArrowLeft', 'ArrowRight'].includes(event.key)) { event.preventDefault(); move(event.key === 'ArrowLeft' ? -1 : 1); } });

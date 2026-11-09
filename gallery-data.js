@@ -9747,5 +9747,15 @@ window.GALLERY_DATA = {
         "fc23cab4fdd43696": 72
       }
     }
-  ]
+  ],
+  "hero": {
+    "id": "site-cover",
+    "src": "covers/hero-0d97bec4de2c.webp",
+    "width": 2400,
+    "height": 1822,
+    "title": "在路上",
+    "topic": "travel",
+    "location": "青甘之旅",
+    "caption": ""
+  }
 };
