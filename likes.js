@@ -1,0 +1,12 @@
+(() => {
+ const cfg=window.GALLERY_LIKES_CONFIG||{}, counts=new Map(), pending=new Set(), errors=new Set();
+ const enabled=!!(cfg.url&&cfg.key); let loaded=false, visitor;
+ const memory=new Set();
+ const liked=id=>{try{return localStorage.getItem('gallery-liked:'+id)==='1'||memory.has(id)}catch{return memory.has(id)}};
+ function identity(){if(visitor)return visitor;try{visitor=localStorage.getItem('gallery-visitor')}catch{};if(!visitor){visitor=crypto.randomUUID();try{localStorage.setItem('gallery-visitor',visitor)}catch{}}return visitor;}
+ async function request(path,body){const headers={apikey:cfg.key,'Content-Type':'application/json'};if(cfg.key.startsWith('eyJ'))headers.Authorization='Bearer '+cfg.key;const r=await fetch(cfg.url.replace(/\/$/,'')+'/rest/v1/'+path,{method:body?'POST':'GET',headers,body:body?JSON.stringify(body):undefined,signal:AbortSignal.timeout(12000)});if(!r.ok)throw Error('Request failed');return r.json();}
+ function render(){document.querySelectorAll('[data-like-id]').forEach(b=>{const id=b.dataset.likeId, done=liked(id);b.disabled=!enabled||pending.has(id)||done;b.setAttribute('aria-pressed',String(done));b.textContent=(done?'♥':'♡')+' '+(counts.has(id)?counts.get(id):loaded?'0':'—')+(errors.has(id)?' · 重试':'');b.setAttribute('aria-label',`${done?'已点赞':'点赞'} ${b.dataset.likeTitle}，${counts.has(id)?counts.get(id)+' 次点赞':'次数加载中'}`);b.title=errors.has(id)?'暂时未能保存，请重试':done?'感谢你的喜欢':'喜欢这张照片';});}
+ async function refresh(){if(!enabled)return;try{const rows=await request('gallery_likes?select=photo_id,total');rows.forEach(r=>counts.set(r.photo_id,Number(r.total)));loaded=true;render()}catch{}}
+ function button(photo){const b=document.createElement('button');b.className='photo-like';b.type='button';b.dataset.likeId=photo.id;b.dataset.likeTitle=photo.title;b.hidden=!enabled;b.addEventListener('click',async e=>{e.stopPropagation();const id=photo.id;if(pending.has(id)||liked(id))return;pending.add(id);errors.delete(id);render();try{const total=await request('rpc/like_photo',{p_photo_id:id,p_visitor_id:identity()});counts.set(id,Number(total));memory.add(id);try{localStorage.setItem('gallery-liked:'+id,'1')}catch{}}catch{errors.add(id)}finally{pending.delete(id);render()}});queueMicrotask(render);return b;}
+ window.GalleryLikes={button,refresh};void refresh();window.addEventListener('focus',refresh);window.addEventListener('storage',()=>{render();void refresh()});setInterval(()=>{if(!document.hidden)void refresh()},30000);
+})();

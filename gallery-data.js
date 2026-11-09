@@ -9749,13 +9749,13 @@ window.GALLERY_DATA = {
     }
   ],
   "hero": {
-    "id": "site-cover",
-    "src": "covers/hero-0d97bec4de2c.webp",
+    "id": "hero-2169501bb9e7",
+    "src": "covers/hero-2169501bb9e7.webp",
     "width": 2400,
-    "height": 1822,
-    "title": "在路上",
+    "height": 1824,
+    "title": "云隙之间，光落草原",
     "topic": "travel",
-    "location": "青甘之旅",
+    "location": "四川 · 川西",
     "caption": ""
   }
 };

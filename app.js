@@ -98,7 +98,7 @@
       const arrow = element('span', 'photo-open', '↗'); arrow.setAttribute('aria-hidden', 'true');
       button.append(image, arrow); button.addEventListener('click', () => openPhoto(index, filtered));
       const meta = element('div', 'photo-meta'); meta.append(element('h3', '', photo.title), element('p', '', locationText(photo)));
-      card.append(button, meta); fragment.append(card);
+      meta.append(window.GalleryLikes.button(photo)); card.append(button, meta); fragment.append(card);
     });
     grid.replaceChildren(fragment); layout();
     const topic = topicById.get(topicId);
@@ -137,6 +137,7 @@
     const photo = viewing[current];
     $('#lightbox-image').src = photo.src; $('#lightbox-image').alt = photo.title;
     $('#lightbox-title').textContent = photo.title;
+    let likes = document.querySelector('#lightbox-likes'); if (!likes) { likes = element('div'); likes.id = 'lightbox-likes'; document.querySelector('.lightbox-caption').append(likes); } likes.replaceChildren(window.GalleryLikes.button(photo));
     $('#lightbox-details').textContent = `${topicById.get(photo.topic).name} / ${locationText(photo)}`;
     $('#lightbox-counter').textContent = `${String(current + 1).padStart(2, '0')} / ${viewing.length}`;
     $('#download-photo').href = photo.src; $('#download-photo').download = `${photo.title}.webp`;
