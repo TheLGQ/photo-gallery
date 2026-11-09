@@ -7,7 +7,13 @@ window.GALLERY_DATA = {
       "intro": "把脚步交给远方，把风景留在这里。",
       "note": "山川、城市，与沿途遇见的光。",
       "count": 328,
-      "cover": "bfe7e850d7632508"
+      "cover": "bfe7e850d7632508",
+      "customCover": {
+        "src": "covers/travel-c62bf0080e3e.webp",
+        "width": 1400,
+        "height": 933,
+        "title": "天南海北封面"
+      }
     },
     {
       "id": "campus",
@@ -16,7 +22,13 @@ window.GALLERY_DATA = {
       "intro": "南山上的四季，也是青春的模样。",
       "note": "走过的校园，和并肩走过的人。",
       "count": 66,
-      "cover": "e08e07245cc3189c"
+      "cover": "e08e07245cc3189c",
+      "customCover": {
+        "src": "covers/campus-1688cb7f7734.webp",
+        "width": 933,
+        "height": 1400,
+        "title": "重庆邮电大学封面"
+      }
     },
     {
       "id": "passing",
@@ -25,7 +37,13 @@ window.GALLERY_DATA = {
       "intro": "短暂交会的目光，也值得被温柔收藏。",
       "note": "偶然路过，刚好遇见你的故事。",
       "count": 8,
-      "cover": "abcdf19385aff34a"
+      "cover": "abcdf19385aff34a",
+      "customCover": {
+        "src": "covers/passing-b21b6022fa47.webp",
+        "width": 933,
+        "height": 1400,
+        "title": "从你的世界路过并截下一帧封面"
+      }
     },
     {
       "id": "memories",
@@ -34,7 +52,13 @@ window.GALLERY_DATA = {
       "intro": "那些一起走过的日子，回头看仍然发亮。",
       "note": "把相聚、告别与笑声，留在这一页。",
       "count": 24,
-      "cover": "7862e2d424a1cdfe"
+      "cover": "7862e2d424a1cdfe",
+      "customCover": {
+        "src": "covers/memories-a51c8a5447c3.webp",
+        "width": 1400,
+        "height": 1064,
+        "title": "一些回忆封面"
+      }
     }
   ],
   "photos": [

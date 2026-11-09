@@ -25,8 +25,8 @@
     const card = element('a', 'topic-card' + (!topic.count ? ' coming-soon' : ''));
     card.href = '#collection'; card.dataset.topic = topic.id;
     const cover = element('div', 'topic-cover');
-    const photo = byId.get(topic.cover);
-    if (photo) { const img = element('img'); img.src = photo.thumb; img.alt = `${topic.name}：${photo.title}`; img.width = photo.width; img.height = photo.height; img.loading = 'lazy'; cover.append(img); }
+    const photo = topic.customCover || byId.get(topic.cover);
+    if (photo) { const img = element('img'); img.src = photo.thumb || photo.src; if (topic.customCover) { img.style.objectFit = 'contain'; cover.style.background = '#111'; } img.alt = `${topic.name}：${photo.title}`; img.width = photo.width; img.height = photo.height; img.loading = 'lazy'; cover.append(img); }
     else { cover.append(element('span', 'blank-frame', '留白'), element('small', 'blank-note', '好的故事，值得等一等。')); }
     cover.append(element('span', 'chapter-number', String(index + 1).padStart(2, '0')));
     const videoCount = videos.filter(video => video.topic === topic.id).length;
