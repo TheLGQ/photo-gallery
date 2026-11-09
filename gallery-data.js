@@ -51,7 +51,7 @@ window.GALLERY_DATA = {
       "english": "MOMENTS TO KEEP",
       "intro": "那些一起走过的日子，回头看仍然发亮。",
       "note": "把相聚、告别与笑声，留在这一页。",
-      "count": 24,
+      "count": 25,
       "cover": "7862e2d424a1cdfe",
       "customCover": {
         "src": "covers/memories-a51c8a5447c3.webp",
@@ -9571,6 +9571,21 @@ window.GALLERY_DATA = {
       "similar": {
         "553fe48ea021f3a4": 76
       }
+    },
+    {
+      "id": "da4ef95e6a27009c",
+      "width": 1280,
+      "height": 1702,
+      "src": "assets/da4ef95e6a27009c-large.webp",
+      "thumb": "assets/da4ef95e6a27009c-thumb.webp",
+      "title": "把回忆装进行囊",
+      "topic": "memories",
+      "location": "毕业时光",
+      "caption": "沿着熟悉的走廊，把这一程的故事带向远方。",
+      "rank": 1384,
+      "layoutGroup": "da4ef95e6a27009c",
+      "layoutSubject": "",
+      "similar": {}
     },
     {
       "id": "ccadd23beec356e8",
